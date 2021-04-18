@@ -1,0 +1,763 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "theater-tickets",
+    "version": "0.0.1",
+    "description": "A backend REST API based control panel for the theater ticket system.",
+    "contact": {
+      "name": "Navi Singh",
+      "email": "navisingh@live.in"
+    }
+  },
+  "paths": {
+    "/analytics/profit": {
+      "get": {
+        "x-controller-name": "AnalyticController",
+        "x-operation-name": "getProfitSummary",
+        "tags": [
+          "AnalyticController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Profit earned by Theater in a specific period",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProfitEarned"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "method",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Use either algorithm or aggregation(by default)"
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Use this date-time format YYYY-MM-DDTHH:mm:ss.sssZ"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Use this date-time format YYYY-MM-DDTHH:mm:ss.sssZ"
+          }
+        ],
+        "operationId": "AnalyticController.getProfitSummary"
+      }
+    },
+    "/analytics/visited": {
+      "get": {
+        "x-controller-name": "AnalyticController",
+        "x-operation-name": "getVisitsSummary",
+        "tags": [
+          "AnalyticController"
+        ],
+        "responses": {
+          "200": {
+            "description": "People visited Theater in a specific period",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PeopleVisited"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "method",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Use either algorithm or aggregation(by default)"
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Use this date-time format YYYY-MM-DDTHH:mm:ss.sssZ"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Use this date-time format YYYY-MM-DDTHH:mm:ss.sssZ"
+          }
+        ],
+        "operationId": "AnalyticController.getVisitsSummary"
+      }
+    },
+    "/tickets/count": {
+      "get": {
+        "x-controller-name": "TicketController",
+        "x-operation-name": "count",
+        "tags": [
+          "TicketController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ticket model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Ticket.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Ticket>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "TicketController.count"
+      }
+    },
+    "/tickets/{id}": {
+      "put": {
+        "x-controller-name": "TicketController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "TicketController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Ticket PUT success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ticket"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "TicketController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "TicketController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "TicketController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Ticket PATCH success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "TicketController.updateById"
+      },
+      "get": {
+        "x-controller-name": "TicketController",
+        "x-operation-name": "findById",
+        "tags": [
+          "TicketController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ticket model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ticket.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "TicketController.findById"
+      },
+      "delete": {
+        "x-controller-name": "TicketController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "TicketController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Ticket DELETE success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "TicketController.deleteById"
+      }
+    },
+    "/tickets": {
+      "post": {
+        "x-controller-name": "TicketController",
+        "x-operation-name": "create",
+        "tags": [
+          "TicketController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ticket model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ticket"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewTicket"
+              }
+            }
+          }
+        },
+        "operationId": "TicketController.create"
+      },
+      "patch": {
+        "x-controller-name": "TicketController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "TicketController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ticket PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Ticket.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Ticket>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPartial"
+              }
+            }
+          }
+        },
+        "operationId": "TicketController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "TicketController",
+        "x-operation-name": "find",
+        "tags": [
+          "TicketController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Ticket model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TicketWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ticket.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "TicketController.find"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Ticket": {
+        "title": "Ticket",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "performanceTitle": {
+            "type": "string"
+          },
+          "performanceTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ticketPrice": {
+            "type": "number"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "customerName",
+          "performanceTitle",
+          "performanceTime",
+          "ticketPrice",
+          "creationDate"
+        ],
+        "additionalProperties": false
+      },
+      "NewTicket": {
+        "title": "NewTicket",
+        "type": "object",
+        "description": "(tsType: Omit<Ticket, 'id'>, schemaOptions: { title: 'NewTicket', exclude: [ 'id' ] })",
+        "properties": {
+          "customerName": {
+            "type": "string"
+          },
+          "performanceTitle": {
+            "type": "string"
+          },
+          "performanceTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ticketPrice": {
+            "type": "number"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "customerName",
+          "performanceTitle",
+          "performanceTime",
+          "ticketPrice",
+          "creationDate"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "Omit<Ticket, 'id'>"
+      },
+      "TicketWithRelations": {
+        "title": "TicketWithRelations",
+        "type": "object",
+        "description": "(tsType: TicketWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "performanceTitle": {
+            "type": "string"
+          },
+          "performanceTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ticketPrice": {
+            "type": "number"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "customerName",
+          "performanceTitle",
+          "performanceTime",
+          "ticketPrice",
+          "creationDate"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "TicketWithRelations"
+      },
+      "TicketPartial": {
+        "title": "TicketPartial",
+        "type": "object",
+        "description": "(tsType: Partial<Ticket>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "performanceTitle": {
+            "type": "string"
+          },
+          "performanceTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ticketPrice": {
+            "type": "number"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Partial<Ticket>"
+      },
+      "ProfitEarned": {
+        "title": "ProfitEarned",
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "string"
+          },
+          "summaryProfit": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PeopleVisited": {
+        "title": "PeopleVisited",
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "string"
+          },
+          "summaryVisits": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
+      "loopback.Count": {
+        "type": "object",
+        "title": "loopback.Count",
+        "x-typescript-type": "@loopback/repository#Count",
+        "properties": {
+          "count": {
+            "type": "number"
+          }
+        }
+      },
+      "Ticket.Filter": {
+        "type": "object",
+        "title": "Ticket.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "customerName": {
+                    "type": "boolean"
+                  },
+                  "performanceTitle": {
+                    "type": "boolean"
+                  },
+                  "performanceTime": {
+                    "type": "boolean"
+                  },
+                  "ticketPrice": {
+                    "type": "boolean"
+                  },
+                  "creationDate": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "id",
+                    "customerName",
+                    "performanceTitle",
+                    "performanceTime",
+                    "ticketPrice",
+                    "creationDate"
+                  ],
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "Ticket.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Ticket>"
+      },
+      "Ticket.Filter1": {
+        "type": "object",
+        "title": "Ticket.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "title": "Ticket.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "customerName": {
+                    "type": "boolean"
+                  },
+                  "performanceTitle": {
+                    "type": "boolean"
+                  },
+                  "performanceTime": {
+                    "type": "boolean"
+                  },
+                  "ticketPrice": {
+                    "type": "boolean"
+                  },
+                  "creationDate": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "id",
+                    "customerName",
+                    "performanceTitle",
+                    "performanceTime",
+                    "ticketPrice",
+                    "creationDate"
+                  ],
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "Ticket.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Ticket>"
+      }
+    }
+  }
+}
